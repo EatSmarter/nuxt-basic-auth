@@ -11,6 +11,7 @@ export interface ModuleOptions {
       }[]
     | string;
   allowedRoutes?: string[];
+  allowedIps?: string[];
 }
 
 // Runtime config TypeScript interface definition
@@ -18,7 +19,7 @@ export type ModuleRuntimeConfig = ModuleOptions;
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: "@kgierke/nuxt-basic-auth",
+    name: "nuxt-basic-auth",
     configKey: "basicAuth",
   },
   // Default configuration options of the Nuxt module
@@ -26,6 +27,7 @@ export default defineNuxtModule<ModuleOptions>({
     enabled: true,
     users: [{ username: "admin", password: "admin" }],
     allowedRoutes: [],
+    allowedIps: [],
   },
   setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url);

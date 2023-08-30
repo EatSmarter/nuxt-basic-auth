@@ -6,7 +6,7 @@ export default defineEventHandler((event) => {
   const config = useRuntimeConfig().basicAuth as ModuleRuntimeConfig;
 
   /**
-   * If the module is not enabled, or no users are defined, or the current route is allowed, do nothing.
+   * If the module is not enabled, or no users are defined, or the current route is allowed, or the source IP is whitelisted, do nothing.
    */
   if (
     !config.enabled ||
@@ -15,6 +15,12 @@ export default defineEventHandler((event) => {
       const regex = new RegExp(route);
 
       return regex.test(event.node.req?.url || "");
+    }) ||
+    config.allowedIps?.some((ip) => {
+      const regex = new RegExp(' ' + ip.replace('.', '\.'));
+      const ipChain = ' ' + event.node.req.socket.remoteAddress + ' ' +  event.node.req.headers['x-forwarded-for'];
+      
+      return regex.test(ipChain);
     })
   ) {
     return;
