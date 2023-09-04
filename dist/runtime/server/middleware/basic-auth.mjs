@@ -6,13 +6,8 @@ export default defineEventHandler((event) => {
     const regex = new RegExp(route);
     return regex.test(event.node.req?.url || "");
   }) || config.allowedIps?.some((ip) => {
-    const regex = new RegExp("" + ip.replace(".", "."));
-    console.log("Req object:");
-    console.log(event.node.req);
-    const ipChain = event.node.req.socket.remoteAddress + " " + event.node.req.headers["x-forwarded-for"];
-    console.log("Checking IP chain");
-    console.log(ip);
-    console.log(ipChain);
+    const regex = new RegExp(" " + ip.replace(".", "."));
+    const ipChain = " " + event.node.req.socket.remoteAddress + " " + event.node.req.headers["x-forwarded-for"];
     return regex.test(ipChain);
   })) {
     return;
